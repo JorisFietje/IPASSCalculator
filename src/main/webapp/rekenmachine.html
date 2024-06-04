@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lot Size Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+<div class="container">
+    <div class="sidebar">
+        <h1>Lot Size Calculator</h1>
+        <ul>
+            <li><a href="#">Calculator</a></li>
+            <li><a href="#">History</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <h2>Lot Size Calculator</h2>
+        <form id="rekenmachine" action="rekenmachine" method="get">
+            <label for="accountCurrency">Account Currency</label>
+            <select id="accountCurrency" name="accountCurrency">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+            </select>
+
+            <label for="saldo">Account Balance</label>
+            <input type="number" id="saldo" name="saldo" placeholder="Balance" step="0.01" required>
+
+            <label for="risicoPercentage">Risk Percentage %</label>
+            <input type="number" id="risicoPercentage" name="risicoPercentage" placeholder="Risk %" step="0.01" required>
+
+            <label for="valutapaar">Currency Pair</label>
+            <select id="valutapaar" name="valutapaar">
+                <option value="EURUSD">EUR/USD</option>
+                <option value="EURGBP">EUR/GBP</option>
+                <option value="EURJPY">EUR/JPY</option>
+                <option value="EURCHF">EUR/CHF</option>
+                <option value="EURCAD">EUR/CAD</option>
+            </select>
+
+            <input type="submit" value="Calculate">
+        </form>
+        <div id="result">
+            <h3>Result:</h3>
+            <div id="serverresponse"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
