@@ -7,19 +7,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
+import controller.CalculatorPersistence;
 
 public class CalculatorServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-
-
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
         PrintWriter out = response.getWriter();
@@ -28,47 +26,58 @@ public class CalculatorServlet extends HttpServlet {
         out.println("<body>");
         out.println("<h1>Lot Size Calculator</h1>");
 
-        String in = request.getParameter("in");
-        if (in == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter 'in' is missing.");
-            return;
-        }
-
         try {
-            double input = Double.parseDouble(in.trim());
-            double risicoPercentage = Double.parseDouble(request.getParameter("risicoPercentage"));
-            double stopLoss = Double.parseDouble(request.getParameter("stopLoss"));
+            // Controleer of alle parameters aanwezig zijn
+            String saldoStr = request.getParameter("saldo");
+            String risicoPercentageStr = request.getParameter("risicoPercentage");
             String valutapaar = request.getParameter("valutapaar");
+            String accountCurrency = request.getParameter("accountCurrency");
+
+            if (saldoStr == null || risicoPercentageStr == null || valutapaar == null) {
+                throw new IllegalArgumentException("Missing parameter(s)");
+            }
+
+            double saldo = Double.parseDouble(saldoStr);
+            double risicoPercentage = Double.parseDouble(risicoPercentageStr);
 
             // Ophalen van de actuele wisselkoers van het valutapaar
             double exchangeRate = getExchangeRate(valutapaar);
 
+            // Berekenen van het risicobedrag
+            double riskAmount = saldo * (risicoPercentage / 100);
+
             // Berekenen van de lot size
-            double lotSize = calculateLotSize(input, risicoPercentage, stopLoss, exchangeRate);
+            double lotSize = calculateLotSize(saldo, risicoPercentage, exchangeRate);
 
             // Teruggeven van de berekende lot size als serverresponse
-            out.println("<p>Actuele lot size voor valutapaar " + valutapaar + ": " + lotSize + "</p>");
+            out.println("<p>Account Currency : " + accountCurrency + "</p>");
+            out.println("<p>Valutapaar: " + valutapaar + "</p>");
+            out.println("<p>Actuele wisselkoers: " + exchangeRate + "</p>");
+            out.println("<p>Risicobedrag: " + riskAmount + "</p>");
+            out.println("<p>Actuele lot size: " + lotSize + "</p>");
 
             // Bijwerken van de serverresponse div op de rekenmachine.html pagina met de berekende lotgrootte
             out.println("<script>");
-            out.println("document.getElementById('serverresponse').innerHTML = 'Actuele lot size voor valutapaar " + valutapaar + ": " + lotSize + "';");
+            out.println("document.getElementById('serverresponse').innerHTML = 'Valutapaar: " + valutapaar + "<br/>Actuele wisselkoers: " + exchangeRate + "<br/>Risicobedrag: " + riskAmount + "<br/>Actuele lot size: " + lotSize + "';");
             out.println("</script>");
 
+            CalculatorPersistence.saveCalculation(saldo, risicoPercentage, exchangeRate, lotSize);
+        } catch (NumberFormatException e) {
+            out.println("<p>Invalid input. Please enter valid numerical values.</p>");
+        } catch (IllegalArgumentException e) {
+            out.println("<p>" + e.getMessage() + "</p>");
+        }
 
         out.println("</body>");
         out.println("</html>");
-        } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter 'in' is not a valid number.");
-        }
+
+
     }
-
-
-
 
 
     // Methode om de actuele wisselkoers op te halen van een valutapaar via de Alpha Vantage API
     private double getExchangeRate(String valutapaar) throws IOException {
-        String apiKey = "AD7SMJO91RSC1YYD"; // Vervang dit door je eigen API-sleutel
+        String apiKey = "HH31BS231AXR7W5P"; // Vervang dit door je eigen API-sleutel
         String apiUrl = "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency="
                 + valutapaar.substring(0, 3) + "&to_currency=" + valutapaar.substring(3) + "&apikey=" + apiKey;
 
@@ -100,15 +109,12 @@ public class CalculatorServlet extends HttpServlet {
     }
 
     // Methode om de lot size te berekenen
-    private double calculateLotSize(double saldo, double risicoPercentage, double stopLoss, double exchangeRate) {
+    private double calculateLotSize(double saldo, double risicoPercentage, double exchangeRate) {
         // Bepaal het bedrag dat u bereid bent te riskeren op basis van het risicopercentage
         double riskAmount = saldo * (risicoPercentage / 100);
 
-        // Bepaal de afstand van de instapprijs tot de stop loss in de valutaprijs (in de basisvaluta)
-        double stopLossDistance = Math.abs(exchangeRate - stopLoss);
-
         // Bereken de grootte van de positie (lot size)
-        double lotSize = riskAmount / stopLossDistance;
+        double lotSize = riskAmount / exchangeRate;
 
         return lotSize;
     }

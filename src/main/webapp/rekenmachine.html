@@ -9,20 +9,21 @@
 <body>
 <div class="container">
     <div class="sidebar">
-        <h1>Lot Size Calculator</h1>
+        <h2>Lot Size Calculator</h2>
         <ul>
-            <li><a href="#">Calculator</a></li>
-            <li><a href="#">History</a></li>
+            <li><a href="rekenmachine.html">Calculator</a></li>
+            <li><a href="history.html">History</a></li>
         </ul>
+        <div class="account">
+            <a href="account.html">Account</a>
+        </div>
     </div>
     <div class="main-content">
         <h2>Lot Size Calculator</h2>
         <form id="rekenmachine" action="rekenmachine" method="get">
             <label for="accountCurrency">Account Currency</label>
             <select id="accountCurrency" name="accountCurrency">
-                <option value="USD">USD</option>
                 <option value="EUR">EUR</option>
-                <option value="GBP">GBP</option>
             </select>
 
             <label for="saldo">Account Balance</label>
@@ -34,10 +35,8 @@
             <label for="valutapaar">Currency Pair</label>
             <select id="valutapaar" name="valutapaar">
                 <option value="EURUSD">EUR/USD</option>
-                <option value="EURGBP">EUR/GBP</option>
-                <option value="EURJPY">EUR/JPY</option>
-                <option value="EURCHF">EUR/CHF</option>
-                <option value="EURCAD">EUR/CAD</option>
+                <option value="GBPJPY">GBP/JPY</option>
+                <option value="GBPUSD">GBP/USD</option>
             </select>
 
             <input type="submit" value="Calculate">
