@@ -6,6 +6,10 @@
 
   <display-name>Archetype Created Web Application</display-name>
 
+  <welcome-file-list>
+    <welcome-file>rekenmachine.jsp</welcome-file>
+  </welcome-file-list>
+
   <servlet>
     <servlet-name>CalculatorServlet</servlet-name>
     <servlet-class>controller.CalculatorServlet</servlet-class>
