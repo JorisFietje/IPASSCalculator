@@ -3,23 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Lot Size Calculator</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=1.1">
     <script src="script.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
 <div class="container">
     <div class="sidebar">
         <h2>Lot Size Calculator</h2>
         <ul>
-            <li><a href="rekenmachine.html">Calculator</a></li>
-            <li><a href="history.html">History</a></li>
+            <li><a href="rekenmachine.jsp">Calculator</a></li>
+            <li><a href="history.jsp">History</a></li>
         </ul>
         <div class="account">
-            <a href="account.html">Account</a>
+            <% if (session.getAttribute("username") == null) { %>
+            <a href="logreg.html">Login/Register</a>
+            <% } else { %>
+            <a href="account.jsp"><i class="fas fa-user"></i></a>
+            <a href="logout.jsp" class="logout"><i class="fas fa-sign-out-alt"></i></a>
+            <% } %>
         </div>
     </div>
     <div class="main-content">
         <h2>Lot Size Calculator</h2>
+        <p>
+            <% if (session.getAttribute("username") == null) { %>
+            Log in to save calculations
+            <% } else { %>
+            Welcome, ${sessionScope.username}!
+            <% } %>
+        </p>
         <form id="rekenmachine" action="rekenmachine" method="get">
             <label for="accountCurrency">Account Currency</label>
             <select id="accountCurrency" name="accountCurrency">
@@ -38,6 +51,10 @@
                 <option value="GBPJPY">GBP/JPY</option>
                 <option value="GBPUSD">GBP/USD</option>
             </select>
+
+            <label for="stopLoss">Stop Loss (pips)</label>
+            <input type="number" id="stopLoss" name="stopLoss" placeholder="Stop Loss (pips)" step="0.01" required>
+
 
             <input type="submit" value="Calculate">
         </form>

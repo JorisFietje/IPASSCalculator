@@ -2,7 +2,10 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #ffff;
-    color: #000;
+}
+
+.main-content {
+   color: #000;
 }
 
 .container {
@@ -18,6 +21,7 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     color: #fff;/* Verplaats de inhoud naar boven */
+    box-shadow: 2px 0px 10px 0px rgba(0,0,0,0.4);
 }
 
 .sidebar h1 {
@@ -26,8 +30,23 @@ body {
 }
 
 .account {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    width: 100%; /* Ensures the account container spans the full width of the sidebar */
+}
+
+.account a {
+    display: flex;
+    align-items: center;
+    text-decoration: none !important;
     color: #fff;
-    text-decoration: none;
+    margin-bottom: 10px;
+}
+
+.account a.logout {
+    order: 2;
 }
 
 .sidebar ul {
@@ -69,6 +88,7 @@ form input, form select {
     border: none;
     border-radius: 5px;
     background-color: #b5b5b5;
+    box-shadow: 0px 17px 37px -15px rgba(0,0,0,0.59);
 }
 
 input[type="submit"] {
@@ -86,6 +106,7 @@ input[type="submit"]:hover {
     padding: 20px;
     border-radius: 5px;
     color: #fff;
+    box-shadow: 0px 0px 19px 2px rgba(0,0,0,0.49);
 }
 
 /* Additional styles for history page */

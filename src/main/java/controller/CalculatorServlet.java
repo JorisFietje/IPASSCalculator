@@ -5,11 +5,15 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.json.JSONObject;
 import controller.CalculatorPersistence;
 
@@ -32,6 +36,7 @@ public class CalculatorServlet extends HttpServlet {
             String risicoPercentageStr = request.getParameter("risicoPercentage");
             String valutapaar = request.getParameter("valutapaar");
             String accountCurrency = request.getParameter("accountCurrency");
+            String stopLossStr = request.getParameter("stopLoss");
 
             if (saldoStr == null || risicoPercentageStr == null || valutapaar == null) {
                 throw new IllegalArgumentException("Missing parameter(s)");
@@ -46,22 +51,37 @@ public class CalculatorServlet extends HttpServlet {
             // Berekenen van het risicobedrag
             double riskAmount = saldo * (risicoPercentage / 100);
 
+            // Ophalen van de stop loss waarde
+            double stopLoss = Double.parseDouble(stopLossStr);
+
             // Berekenen van de lot size
-            double lotSize = calculateLotSize(saldo, risicoPercentage, exchangeRate);
+            double lotSize = calculateLotSize(saldo, risicoPercentage, exchangeRate, stopLoss);
+
+
+            // Get the current session
+            HttpSession session = request.getSession();
+
+            // Retrieve the username from the session
+            String username = (String) session.getAttribute("username");
+
+            // Print the username to the console
+            System.out.println("Username: " + username);
 
             // Teruggeven van de berekende lot size als serverresponse
             out.println("<p>Account Currency : " + accountCurrency + "</p>");
             out.println("<p>Valutapaar: " + valutapaar + "</p>");
             out.println("<p>Actuele wisselkoers: " + exchangeRate + "</p>");
             out.println("<p>Risicobedrag: " + riskAmount + "</p>");
+            out.println("<p>Stoploss (pips): " + stopLoss + "</p>");
             out.println("<p>Actuele lot size: " + lotSize + "</p>");
 
-            // Bijwerken van de serverresponse div op de rekenmachine.html pagina met de berekende lotgrootte
+            // Bijwerken van de serverresponse div op de rekenmachine.jsp pagina met de berekende lotgrootte
             out.println("<script>");
             out.println("document.getElementById('serverresponse').innerHTML = 'Valutapaar: " + valutapaar + "<br/>Actuele wisselkoers: " + exchangeRate + "<br/>Risicobedrag: " + riskAmount + "<br/>Actuele lot size: " + lotSize + "';");
             out.println("</script>");
 
-            CalculatorPersistence.saveCalculation(saldo, risicoPercentage, exchangeRate, lotSize);
+// Save the calculation
+            CalculatorPersistence.saveCalculation(username, saldo, risicoPercentage, exchangeRate, lotSize);
         } catch (NumberFormatException e) {
             out.println("<p>Invalid input. Please enter valid numerical values.</p>");
         } catch (IllegalArgumentException e) {
@@ -109,12 +129,12 @@ public class CalculatorServlet extends HttpServlet {
     }
 
     // Methode om de lot size te berekenen
-    private double calculateLotSize(double saldo, double risicoPercentage, double exchangeRate) {
+    double calculateLotSize(double saldo, double risicoPercentage, double exchangeRate, double stopLoss) {
         // Bepaal het bedrag dat u bereid bent te riskeren op basis van het risicopercentage
         double riskAmount = saldo * (risicoPercentage / 100);
 
         // Bereken de grootte van de positie (lot size)
-        double lotSize = riskAmount / exchangeRate;
+        double lotSize = riskAmount / (exchangeRate * stopLoss);
 
         return lotSize;
     }
