@@ -5,6 +5,7 @@
     <title>Lot Size Calculator</title>
     <link rel="stylesheet" href="styles.css?v=1.1">
     <script src="script.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
@@ -52,9 +53,6 @@
                 <option value="GBPUSD">GBP/USD</option>
             </select>
 
-            <label for="stopLoss">Stop Loss (pips)</label>
-            <input type="number" id="stopLoss" name="stopLoss" placeholder="Stop Loss (pips)" step="0.01" required>
-
 
             <input type="submit" value="Calculate">
         </form>
@@ -64,5 +62,6 @@
         </div>
     </div>
 </div>
+<script src="script.js"></script>
 </body>
 </html>

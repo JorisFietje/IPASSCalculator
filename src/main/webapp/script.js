@@ -19,43 +19,20 @@ function submitForm(event) {
     event.preventDefault();
 }
 
-// Code for dynamically filling the history table
-document.addEventListener("DOMContentLoaded", function() {
-    const historyData = [
-        { currencyPair: "GBP/JPY", lotSize: 16, date: "1-06-2024" },
-        { currencyPair: "GBP/USD", lotSize: 12, date: "13-05-2024" },
-        { currencyPair: "EUR/USD", lotSize: 8, date: "06-05-2024" },
-        { currencyPair: "EUR/USD", lotSize: 3, date: "24-04-2024" }
-    ];
-
-    const historyTableBody = document.getElementById("history-table-body");
-
-    historyData.forEach(entry => {
-        const row = document.createElement("tr");
-
-        const currencyPairCell = document.createElement("td");
-        currencyPairCell.textContent = entry.currencyPair;
-        row.appendChild(currencyPairCell);
-
-        const lotSizeCell = document.createElement("td");
-        lotSizeCell.textContent = entry.lotSize;
-        row.appendChild(lotSizeCell);
-
-        const dateCell = document.createElement("td");
-        dateCell.textContent = entry.date;
-        row.appendChild(dateCell);
-
-        const actionCell = document.createElement("td");
-        const deleteButton = document.createElement("button");
-        deleteButton.className = "delete-button";
-        deleteButton.textContent = "🗑️";
-        const favoriteButton = document.createElement("button");
-        favoriteButton.className = "favorite-button";
-        favoriteButton.textContent = "⭐";
-        actionCell.appendChild(deleteButton);
-        actionCell.appendChild(favoriteButton);
-        row.appendChild(actionCell);
-
-        historyTableBody.appendChild(row);
-    });
+document.getElementById('copyButton').addEventListener('click', function() {
+    // Create a new textarea element and give it id='temp_element'
+    var textarea = document.createElement('textarea')
+    textarea.id = 'temp_element'
+    // Optional step to make less noise on the page, if any!
+    textarea.style.height = 0
+    // Now append it to your page somewhere, I chose <body>
+    document.body.appendChild(textarea)
+    // Give our textarea a value of whatever inside the div of id='content'
+    textarea.value = document.querySelector('.lotSize').innerText
+    // Now copy whatever inside the textarea to clipboard
+    var selector = document.querySelector('#temp_element')
+    selector.select()
+    document.execCommand('copy')
+    // Remove the textarea
+    document.querySelector('#temp_element').remove()
 });

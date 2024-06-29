@@ -37,4 +37,22 @@
     <url-pattern>/login</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>DeleteCalculationServlet</servlet-name>
+    <servlet-class>controller.DeleteCalculationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteCalculationServlet</servlet-name>
+    <url-pattern>/DeleteCalculationServlet</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ChangePassword</servlet-name>
+    <servlet-class>controller.ChangePasswordServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ChangePassword</servlet-name>
+    <url-pattern>/ChangePasswordServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

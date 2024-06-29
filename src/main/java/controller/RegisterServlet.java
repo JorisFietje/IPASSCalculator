@@ -21,8 +21,8 @@ public class RegisterServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        // Debugging: Log de inkomende gegevens
-        System.out.println("Registering user: " + username);
+//        // Debugging: Log de inkomende gegevens
+//        System.out.println("Registering user: " + username);
 
         BufferedWriter writer = null;
         try {

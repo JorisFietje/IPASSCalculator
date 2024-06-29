@@ -5,17 +5,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.json.JSONObject;
-import controller.CalculatorPersistence;
+
 
 public class CalculatorServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -26,9 +23,7 @@ public class CalculatorServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
         out.println("<html>");
-        out.println("<head><title>Lot Size Calculator</title></head>");
         out.println("<body>");
-        out.println("<h1>Lot Size Calculator</h1>");
 
         try {
             // Controleer of alle parameters aanwezig zijn
@@ -36,7 +31,6 @@ public class CalculatorServlet extends HttpServlet {
             String risicoPercentageStr = request.getParameter("risicoPercentage");
             String valutapaar = request.getParameter("valutapaar");
             String accountCurrency = request.getParameter("accountCurrency");
-            String stopLossStr = request.getParameter("stopLoss");
 
             if (saldoStr == null || risicoPercentageStr == null || valutapaar == null) {
                 throw new IllegalArgumentException("Missing parameter(s)");
@@ -51,11 +45,8 @@ public class CalculatorServlet extends HttpServlet {
             // Berekenen van het risicobedrag
             double riskAmount = saldo * (risicoPercentage / 100);
 
-            // Ophalen van de stop loss waarde
-            double stopLoss = Double.parseDouble(stopLossStr);
-
             // Berekenen van de lot size
-            double lotSize = calculateLotSize(saldo, risicoPercentage, exchangeRate, stopLoss);
+            double lotSize = calculateLotSize(saldo, risicoPercentage, exchangeRate);
 
 
             // Get the current session
@@ -72,22 +63,23 @@ public class CalculatorServlet extends HttpServlet {
             out.println("<p>Valutapaar: " + valutapaar + "</p>");
             out.println("<p>Actuele wisselkoers: " + exchangeRate + "</p>");
             out.println("<p>Risicobedrag: " + riskAmount + "</p>");
-            out.println("<p>Stoploss (pips): " + stopLoss + "</p>");
-            out.println("<p>Actuele lot size: " + lotSize + "</p>");
+            out.println("<p>Actuele lot size: " + String.format("%.4f", lotSize) + " <button id='copyButton'>Copy</button></p>");
 
             // Bijwerken van de serverresponse div op de rekenmachine.jsp pagina met de berekende lotgrootte
             out.println("<script>");
             out.println("document.getElementById('serverresponse').innerHTML = 'Valutapaar: " + valutapaar + "<br/>Actuele wisselkoers: " + exchangeRate + "<br/>Risicobedrag: " + riskAmount + "<br/>Actuele lot size: " + lotSize + "';");
             out.println("</script>");
 
-// Save the calculation
-            CalculatorPersistence.saveCalculation(username, saldo, risicoPercentage, exchangeRate, lotSize);
+
+            CalculatorPersistence.saveCalculation(username, saldo, risicoPercentage, exchangeRate, lotSize, valutapaar);
+
+
         } catch (NumberFormatException e) {
             out.println("<p>Invalid input. Please enter valid numerical values.</p>");
         } catch (IllegalArgumentException e) {
             out.println("<p>" + e.getMessage() + "</p>");
         }
-
+        out.println("<script src='script.js'></script>");
         out.println("</body>");
         out.println("</html>");
 
@@ -99,7 +91,7 @@ public class CalculatorServlet extends HttpServlet {
     private double getExchangeRate(String valutapaar) throws IOException {
         String apiKey = "HH31BS231AXR7W5P"; // Vervang dit door je eigen API-sleutel
         String apiUrl = "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency="
-                + valutapaar.substring(0, 3) + "&to_currency=" + valutapaar.substring(3) + "&apikey=" + apiKey;
+                + valutapaar.substring(0, 3) + "&to_currency=EUR&apikey=" + apiKey;
 
         URL url = new URL(apiUrl);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -128,13 +120,15 @@ public class CalculatorServlet extends HttpServlet {
         return exchangeRate;
     }
 
-    // Methode om de lot size te berekenen
-    double calculateLotSize(double saldo, double risicoPercentage, double exchangeRate, double stopLoss) {
-        // Bepaal het bedrag dat u bereid bent te riskeren op basis van het risicopercentage
+    double calculateLotSize(double saldo, double risicoPercentage, double exchangeRate) {
+        // Calculate the risk amount
         double riskAmount = saldo * (risicoPercentage / 100);
 
-        // Bereken de grootte van de positie (lot size)
-        double lotSize = riskAmount / (exchangeRate * stopLoss);
+        // Determine the pip value based on the currency pair
+        double currencyValue = riskAmount / exchangeRate;
+
+        // Calculate the lot size
+        double lotSize = currencyValue / 1000;
 
         return lotSize;
     }

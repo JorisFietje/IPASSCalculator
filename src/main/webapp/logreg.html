@@ -5,9 +5,11 @@
     <title>Login en Registratie</title>
     <link rel="stylesheet" href="logreg.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <body>
 <div class="container">
+
     <div id="register">
         <h2>Registreren</h2>
         <form id="registerForm" action="register" method="post">
@@ -30,5 +32,10 @@
         </form>
     </div>
 </div>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 </body>
 </html>
