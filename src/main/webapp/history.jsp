@@ -17,6 +17,7 @@
         <ul>
             <li><a href="rekenmachine.jsp">Calculator</a></li>
             <li><a href="history.jsp">History</a></li>
+            <li><a href="about.jsp">About</a></li>
         </ul>
         <div class="account">
             <% if (session.getAttribute("username") == null) { %>

@@ -55,8 +55,6 @@ public class CalculatorServlet extends HttpServlet {
             // Retrieve the username from the session
             String username = (String) session.getAttribute("username");
 
-            // Print the username to the console
-            System.out.println("Username: " + username);
 
             // Teruggeven van de berekende lot size als serverresponse
             out.println("<p>Account Currency : " + accountCurrency + "</p>");
@@ -79,7 +77,7 @@ public class CalculatorServlet extends HttpServlet {
         } catch (IllegalArgumentException e) {
             out.println("<p>" + e.getMessage() + "</p>");
         }
-        out.println("<script src='script.js'></script>");
+        //out.println("<script src='script.js'></script>");
         out.println("</body>");
         out.println("</html>");
 

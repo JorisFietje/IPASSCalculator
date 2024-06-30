@@ -43,6 +43,11 @@
       <version>RELEASE</version>
       <scope>test</scope>
     </dependency>
+      <dependency>
+          <groupId>io.jsonwebtoken</groupId>
+          <artifactId>jjwt</artifactId>
+          <version>0.9.1</version>
+      </dependency>
   </dependencies>
   <build>
     <pluginManagement>
@@ -60,8 +65,8 @@
               <version>2.10.0</version>
               <configuration>
                   <schemaVersion>v2</schemaVersion>
-                  <resourceGroup>test-1719577452237-rg</resourceGroup>
-                  <appName>test-1719577452237</appName>
+                  <resourceGroup>test-1719755833749-rg</resourceGroup>
+                  <appName>test-1719755833749</appName>
                   <pricingTier>F1</pricingTier>
                   <region>centralus</region>
                   <runtime>
