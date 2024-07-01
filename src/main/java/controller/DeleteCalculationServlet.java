@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 public class DeleteCalculationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            // A getter is used here to retrieve the id from the request
             String id = request.getParameter("id");
             // Call the method to delete the calculation
             CalculatorPersistence.deleteCalculation(id);

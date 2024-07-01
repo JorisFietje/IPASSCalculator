@@ -18,11 +18,9 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Getters are used here to retrieve the username and password from the request
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-
-//        // Debugging: Log de inkomende gegevens
-//        System.out.println("Registering user: " + username);
 
         BufferedWriter writer = null;
         try {
@@ -44,7 +42,7 @@ public class RegisterServlet extends HttpServlet {
             writer.write(username + "," + password);
             writer.newLine();
 
-            // After successful registration, create a session for the new user
+            // After successful registration, a setter is used here to set the username in the session
             HttpSession session = request.getSession();
             session.setAttribute("username", username);
 

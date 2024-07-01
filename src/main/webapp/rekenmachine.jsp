@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Lot Size Calculator</title>
-    <link rel="stylesheet" href="styles.css?v=1.1">
-    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="styles/styles.css?v=1.1">
+    <script src="styles/script.js" defer></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
@@ -63,6 +63,6 @@
         </div>
     </div>
 </div>
-<script src="script.js"></script>
+<script src="styles/script.js"></script>
 </body>
 </html>

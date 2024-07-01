@@ -26,7 +26,7 @@ public class CalculatorServlet extends HttpServlet {
         out.println("<body>");
 
         try {
-            // Controleer of alle parameters aanwezig zijn
+            // Getters are used here to retrieve the parameters from the request
             String saldoStr = request.getParameter("saldo");
             String risicoPercentageStr = request.getParameter("risicoPercentage");
             String valutapaar = request.getParameter("valutapaar");
@@ -52,16 +52,16 @@ public class CalculatorServlet extends HttpServlet {
             // Get the current session
             HttpSession session = request.getSession();
 
-            // Retrieve the username from the session
+            // A getter is used here to retrieve the username from the session
             String username = (String) session.getAttribute("username");
 
 
             // Teruggeven van de berekende lot size als serverresponse
-            out.println("<p>Account Currency : " + accountCurrency + "</p>");
-            out.println("<p>Valutapaar: " + valutapaar + "</p>");
-            out.println("<p>Actuele wisselkoers: " + exchangeRate + "</p>");
-            out.println("<p>Risicobedrag: " + riskAmount + "</p>");
-            out.println("<p>Actuele lot size: " + String.format("%.4f", lotSize) + " <button id='copyButton'>Copy</button></p>");
+            out.println("<p>Account Currency: " + accountCurrency + "</p>");
+            out.println("<p>Currency Pair: " + valutapaar + "</p>");
+            out.println("<p>Exchange Rate: " + exchangeRate + "</p>");
+            out.println("<p>Risk Amount: " + riskAmount + "</p>");
+            out.println("<p>Lot Size: " + String.format("%.4f", lotSize) + "</p>");
 
             // Bijwerken van de serverresponse div op de rekenmachine.jsp pagina met de berekende lotgrootte
             out.println("<script>");
@@ -77,7 +77,6 @@ public class CalculatorServlet extends HttpServlet {
         } catch (IllegalArgumentException e) {
             out.println("<p>" + e.getMessage() + "</p>");
         }
-        //out.println("<script src='script.js'></script>");
         out.println("</body>");
         out.println("</html>");
 
@@ -118,6 +117,7 @@ public class CalculatorServlet extends HttpServlet {
         return exchangeRate;
     }
 
+    // Methode om de lotgrootte te berekenen op basis van het saldo, risicopercentage en wisselkoers
     double calculateLotSize(double saldo, double risicoPercentage, double exchangeRate) {
         // Calculate the risk amount
         double riskAmount = saldo * (risicoPercentage / 100);

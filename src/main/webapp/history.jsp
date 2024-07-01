@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title>Calculation History</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="styles.css?v=1.1">
+    <link rel="stylesheet" href="styles/styles.css?v=1.1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
@@ -35,14 +35,14 @@
             List<String> calculations = CalculatorPersistence.getCalculationsForUser(username);
         %>
         <% if (calculations != null && !calculations.isEmpty()) { %>
-        <table>
+        <table id="historyTable">
             <tr>
                 <th>Currency Pair</th>
                 <th>Lot Size</th>
                 <th>Balance</th>
                 <th>Exchange Rate</th>
                 <th>Risk Percentage</th>
-                <th>Date</th>
+                <th id="dateHeader" onclick="sortTable()">Date</th>
                 <th>Actions</th>
             </tr>
             <% for (String calculation : calculations) {
@@ -77,7 +77,16 @@
 </div>
 <script>
     $(document).ready(function() {
-        $('.delete-button').click(function() {
+        $('.delete-button').click(function(event) {
+            // Show a confirmation dialog
+            var confirmDelete = confirm('Are you sure you want to delete this item?');
+
+            // If the user clicked Cancel, prevent the default action
+            if (!confirmDelete) {
+                event.preventDefault();
+                return;
+            }
+
             var id = $(this).data('id');
             $.post('DeleteCalculationServlet', {id: id}, function(response) {
                 // Regardless of the response, refresh the page
@@ -86,5 +95,6 @@
         });
     });
 </script>
+<script src="styles/script.js"></script>
 </body>
 </html>

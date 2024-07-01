@@ -3,13 +3,12 @@ package controller;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class CalculatorPersistence {
     private static final String FILE_PATH = "calculations.txt";
 
+    // Method to save a calculation to the file
     public static void saveCalculation(String username, double saldo, double risicoPercentage, double exchangeRate, double lotSize, String valutapaar) {
         // Check if the username is null or empty
         if (username == null || username.isEmpty()) {
@@ -36,6 +35,7 @@ public class CalculatorPersistence {
         }
     }
 
+    // Method to delete a calculation from the file
     public static void deleteCalculation(String id) {
         List<String> calculations = new ArrayList<>();
         String line;
@@ -60,6 +60,7 @@ public class CalculatorPersistence {
         }
     }
 
+    // Method to retrieve all calculations from the file
     public static List<String> getCalculationsForUser(String username) {
     List<String> calculations = new ArrayList<>();
     try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
@@ -74,4 +75,21 @@ public class CalculatorPersistence {
     }
     return calculations;
 }
+
+    // Account statistics methods
+    // Method to get the total number of calculations for a user
+    public static int getTotalCalculations(String username) {
+        return getCalculationsForUser(username).size();
+    }
+
+    // Method to get the most used currency pair for a user
+    public static String getMostUsedCurrencyPair(String username) {
+        List<String> calculations = getCalculationsForUser(username);
+        Map<String, Integer> currencyPairCount = new HashMap<>();
+        for (String calculation : calculations) {
+            String currencyPair = calculation.split(", ")[7].split(": ")[1];
+            currencyPairCount.put(currencyPair, currencyPairCount.getOrDefault(currencyPair, 0) + 1);
+        }
+        return currencyPairCount.entrySet().stream().max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).orElse("No calculations made yet");
+    }
 }

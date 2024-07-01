@@ -15,6 +15,7 @@ public class LoginServlet extends HttpServlet {
     private static final String FILE_PATH = "users.csv";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Getters are used here to retrieve the username and password from the request
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
@@ -25,6 +26,7 @@ public class LoginServlet extends HttpServlet {
                 if (parts[0].equals(username) && parts[1].equals(password)) {
                     // Create a session for the logged in user
                     HttpSession session = request.getSession();
+                    // A setter is used here to set the username in the session
                     session.setAttribute("username", username);
 
                     // Redirect to the rekenmachine.jsp page

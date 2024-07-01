@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>About</title>
-    <link rel="stylesheet" href="styles.css?v=1.1">
-    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="styles/styles.css?v=1.1">
+    <script src="styles/script.js" defer></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
@@ -43,12 +43,12 @@
                     The application also allows users to save their calculations. This feature is useful for users who want to keep track of their trading decisions and analyze their performance over time. The saved calculations can be viewed in the "History" page.
                 </p>
                 <p>
-                    Users can also register an account and login to access more features. For example, logged-in users can view their account details and logout from the application.
+                    Users can also register an account and login to access more features. For example, logged-in users can view their account statistics and logout from the application.
                 </p>
             </article>
         </section>
     </div>
 </div>
-<script src="script.js"></script>
+<script src="styles/script.js"></script>
 </body>
 </html>

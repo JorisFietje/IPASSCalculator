@@ -11,10 +11,11 @@ import java.util.List;
 public class ChangePasswordServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            // Getters are used here to retrieve the currentPassword and newPassword from the request
             String currentPassword = request.getParameter("currentPassword");
             String newPassword = request.getParameter("newPassword");
 
-            // Retrieve the user from the session
+            // A getter is used here to retrieve the username from the session
             String username = (String) request.getSession().getAttribute("username");
 
             // Check if the current password is correct

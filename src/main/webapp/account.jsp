@@ -1,9 +1,10 @@
+<%@ page import="controller.CalculatorPersistence" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Account</title>
-    <link rel="stylesheet" href="styles.css?v=1.1">
+    <link rel="stylesheet" href="styles/styles.css?v=1.1">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
@@ -33,14 +34,25 @@
         </div>
     </div>
     <div class="main-content">
-        <h2>Account</h2>
-        <p>Welcome, ${sessionScope.username}!</p>
+        <h2>Account of ${sessionScope.username}</h2>
+        <h3>User Statistics</h3>
+        <div class="user-statistics">
+            <div class="statistic">
+                <span class="statistic-title">Total Calculations:</span>
+                <span class="statistic-value"><%= CalculatorPersistence.getTotalCalculations((String) session.getAttribute("username")) %></span>
+            </div>
+            <div class="statistic">
+                <span class="statistic-title">Most Used Currency Pair:</span>
+                <span class="statistic-value"><%= CalculatorPersistence.getMostUsedCurrencyPair((String) session.getAttribute("username")) %></span>
+            </div>
+        </div>
+        <h3>Change Password</h3>
         <form action="ChangePasswordServlet" method="post">
             <label for="currentPassword">Current Password:</label>
             <input type="password" id="currentPassword" name="currentPassword" required pattern=".{8,}" title="Password should be at least 8 characters long.">
             <label for="newPassword">New Password:</label>
             <input type="password" id="newPassword" name="newPassword" required pattern=".{8,}" title="Password should be at least 8 characters long.">
-            <input type="submit" value="Change Credentials">
+            <input type="submit" value="Change Password">
         </form>
     </div>
 </div>
