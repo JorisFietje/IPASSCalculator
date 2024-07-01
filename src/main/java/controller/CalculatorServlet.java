@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Scanner;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -55,17 +56,18 @@ public class CalculatorServlet extends HttpServlet {
             // A getter is used here to retrieve the username from the session
             String username = (String) session.getAttribute("username");
 
-
+            Locale.setDefault(Locale.US);
             // Teruggeven van de berekende lot size als serverresponse
             out.println("<p>Account Currency: " + accountCurrency + "</p>");
             out.println("<p>Currency Pair: " + valutapaar + "</p>");
-            out.println("<p>Exchange Rate: " + exchangeRate + "</p>");
-            out.println("<p>Risk Amount: " + riskAmount + "</p>");
-            out.println("<p>Lot Size: " + String.format("%.4f", lotSize) + "</p>");
+            out.println("<p>Exchange Rate: " + exchangeRate + " </p>");
+            out.println("<p>Risk Amount: " + riskAmount + " </p>");
+            out.println("<p>Lot Size: " + String.format(Locale.US, "%.4f", lotSize) + "</p>");
+            String formattedLotSize = String.format(Locale.US, "%.4f", lotSize);
 
             // Bijwerken van de serverresponse div op de rekenmachine.jsp pagina met de berekende lotgrootte
             out.println("<script>");
-            out.println("document.getElementById('serverresponse').innerHTML = 'Valutapaar: " + valutapaar + "<br/>Actuele wisselkoers: " + exchangeRate + "<br/>Risicobedrag: " + riskAmount + "<br/>Actuele lot size: " + lotSize + "';");
+            out.println("document.getElementById('serverresponse').innerHTML = 'Valutapaar: " + valutapaar + "<br/>Actuele wisselkoers: " + exchangeRate + "<br/>Risicobedrag: " + riskAmount + "<br/>Lot Size: " + formattedLotSize + "';");
             out.println("</script>");
 
 
